@@ -38,6 +38,7 @@ object MemTimeCheck {
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
+
     val appConfig = parseCommandLine(args).getOrElse(Config())
 //    val path = appConfig.dir.getOrElse("./data")
 //    val extension = appConfig.ext.getOrElse(".txt")
@@ -50,7 +51,8 @@ object MemTimeCheck {
 
     val result = rdd.map(_ + 5).count()
 
-    println(s"The result is $result")
+    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions}")
+    println(s"The debug string is ${rdd.toDebugString}")
 
     //spark.stop()
   }
