@@ -34,7 +34,7 @@ object MemTimeCheck {
   }
 
   def main(args: Array[String]): Unit={
-    val conf = new SparkConf().setAppName("LineCount File I/O")//.set("spark.metrics.conf","")
+    val conf = new SparkConf().setAppName("LineCount File I/O").set("spark.cores.max","")//.set("spark.metrics.conf","")
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
@@ -51,7 +51,7 @@ object MemTimeCheck {
 
     val result = rdd.map(_ + 5).count()
 
-    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions}")
+    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions.length}")
     println(s"The debug string is ${rdd.toDebugString}")
 
     //spark.stop()
