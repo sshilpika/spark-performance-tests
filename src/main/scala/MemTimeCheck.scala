@@ -39,11 +39,11 @@ object MemTimeCheck {
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
     val appConfig = parseCommandLine(args).getOrElse(Config())
-    val path = appConfig.dir.getOrElse("./data")
-    val extension = appConfig.ext.getOrElse(".txt")
-    val slices = appConfig.slices
-    val exec = appConfig.executor
-    val fileN = appConfig.fileN
+//    val path = appConfig.dir.getOrElse("./data")
+//    val extension = appConfig.ext.getOrElse(".txt")
+//    val slices = appConfig.slices
+//    val exec = appConfig.executor
+//    val fileN = appConfig.fileN
 
     val rdd = spark.parallelize(1 to 100000000, 3)
 
