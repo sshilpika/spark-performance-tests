@@ -34,7 +34,7 @@ object MemTimeCheck {
   }
 
   def main(args: Array[String]): Unit={
-    val conf = new SparkConf().setAppName("LineCount File I/O").set("spark.cores.max","")//.set("spark.metrics.conf","")
+    val conf = new SparkConf().setAppName("LineCount File I/O").set("spark.cores.max","3").set("spark.executor.cores","1")//.set("spark.metrics.conf","")
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
