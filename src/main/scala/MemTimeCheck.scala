@@ -46,7 +46,7 @@ object MemTimeCheck {
 //    val fileN = appConfig.fileN
 
     //val rdd = spark.parallelize(1 to 100000000, 3)
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/")
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt")
 
     val result = rdd.map(_ + 5).count()
 
