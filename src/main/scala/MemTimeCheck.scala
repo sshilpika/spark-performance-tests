@@ -5,7 +5,7 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object MemTimeCheck {
 
-  case class Config(dir: Option[String] = None, ext: Option[String] = None, slices: Int = 4, executor: Int = 1, fileN: String = "")
+  case class Config(dir: Option[String] = None, ext: Option[String] = None, slices: Int = 4, executor: String = "1g", fileN: String = "")
 
 
   def parseCommandLine(args: Array[String]): Option[Config] = {
@@ -20,7 +20,7 @@ object MemTimeCheck {
       opt[Int]('s', "slices") action { (x, c) =>
         c.copy(slices = x)
       } text ("slices is an Int property")
-      opt[Int]('x', "executor") action { (x, c) =>
+      opt[String]('x', "executor") action { (x, c) =>
         c.copy(executor = x)
       } text ("executor is an Int property")
       opt[String]('f', "fileN") action { (x, c) =>
@@ -34,26 +34,33 @@ object MemTimeCheck {
   }
 
   def main(args: Array[String]): Unit={
-    val conf = new SparkConf().setAppName("LineCount File I/O").set("spark.cores.max","3").set("spark.executor.cores","1")//.set("spark.metrics.conf","")
+
+    val appConfig = parseCommandLine(args).getOrElse(Config())
+    val exec_cores = appConfig.slices
+    val exec = appConfig.executor
+
+    val conf = new SparkConf().setAppName("Spark Performance-Cooley").
+      set("spark.executor.memory",exec).
+      set("spark.executor.cores",exec_cores.toString).
+      set("","")
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
 
-    val appConfig = parseCommandLine(args).getOrElse(Config())
+
 //    val path = appConfig.dir.getOrElse("./data")
 //    val extension = appConfig.ext.getOrElse(".txt")
-//    val slices = appConfig.slices
-//    val exec = appConfig.executor
+
 //    val fileN = appConfig.fileN
 
     //val rdd = spark.parallelize(1 to 100000000, 3)
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt")
-
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",exec_cores)
+    //val res1 = rdd.reduce(_+_)
     val result = rdd.map(_ + 5).count()
 
     println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions.length}")
     println(s"The debug string is ${rdd.toDebugString}")
-
+    //println(s"The sum is ${res1}")
     //spark.stop()
   }
 
