@@ -45,7 +45,7 @@ object MemTimeCheck {
     val exec = appConfig.executor
     val maxc = appConfig.maxc
 
-    val conf = new SparkConf().setAppName("Spark Performance-Cooley").
+    val conf = new SparkConf().setAppName("Spark-Performance-Cooley").
       set("spark.cores.max",maxc.toString).
       set("spark.executor.memory",exec).
       set("spark.executor.cores",exec_cores.toString).
