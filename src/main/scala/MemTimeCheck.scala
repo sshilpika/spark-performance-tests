@@ -55,7 +55,7 @@ object MemTimeCheck {
     import sqlContext.implicits._
 
 
-    val df = sqlContext.read.parquet("/Users/Shilpika/bF.parquet")
+    val df = sqlContext.read.parquet("/projects/ExaHDF5/sshilpika/bF.parquet")
     //val res1 = rdd.reduce(_+_)
     val result = df.select(df("num")+5).collect()
 
