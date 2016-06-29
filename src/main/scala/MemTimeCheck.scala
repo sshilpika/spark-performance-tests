@@ -18,7 +18,7 @@ object MemTimeCheck {
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)
     import sqlContext.implicits._
     // Create an RDD
-    val number = sc.textFile("/projects/ExaHDF5/sshilpika/bf2.txt")
+    val number = sc.textFile("/projects/ExaHDF5/sshilpika/bF.txt")
 
     // The schema is encoded in a string
     val schemaString = "num"
