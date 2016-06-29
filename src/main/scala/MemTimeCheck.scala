@@ -49,28 +49,18 @@ object MemTimeCheck {
     val maxc = appConfig.maxc
     val ecore = appConfig.ecore
 
-    val conf = new SparkConf().setAppName("Spark-Performance-Cooley").
-      set("spark.cores.max",maxc.toString).
-      set("spark.executor.memory",exec).
-      set("spark.executor.cores",ecore.toString)//.
-      //set("","")
+    val conf = new SparkConf().setAppName("Spark-Performance-Cooley")
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
 
 
-//    val path = appConfig.dir.getOrElse("./data")
-//    val extension = appConfig.ext.getOrElse(".txt")
-
-//    val fileN = appConfig.fileN
-
-    //val rdd = spark.parallelize(1 to 100000000, 3)
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",partitions)
+    val df = sqlContext.read.parquet("/Users/Shilpika/bF.parquet")
     //val res1 = rdd.reduce(_+_)
-    val result = rdd.map(_ + 5).count()
+    val result = df.select(df("num")+5).collect()
 
-    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions.length}")
-    println(s"The debug string is ${rdd.toDebugString}")
+    println(s"The result is $result")
+    //println(s"The debug string is ${result}")
     //println(s"The sum is ${res1}")
     //spark.stop()
   }
