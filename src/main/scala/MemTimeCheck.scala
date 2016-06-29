@@ -60,7 +60,7 @@ object MemTimeCheck {
 
     val df = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet")
     //val res1 = rdd.reduce(_+_)
-    val result = df.select(df("num")+5).collect()
+    val result = df.select(df("num")+5).count()
 
     println(s"The result is $result")
     //println(s"The debug string is ${result}")
