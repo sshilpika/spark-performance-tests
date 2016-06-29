@@ -48,7 +48,7 @@ object MemTimeCheck {
 
     // The results of SQL queries are DataFrames and support all the normal RDD operations.
     // The columns of a row in the result can be accessed by field index or by field name.
-    results.map(t => "Number: " + t(0)).collect().foreach(println)
+    //results.map(t => "Number: " + t(0)).collect().foreach(println)
 
 
     results.write.parquet("/projects/ExaHDF5/sshilpika/bf.parquet")
