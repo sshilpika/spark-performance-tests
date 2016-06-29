@@ -5,7 +5,9 @@ import org.apache.spark.{SparkConf, SparkContext}
   */
 object MemTimeCheck {
 
-  case class Config(dir: Option[String] = None, ext: Option[String] = None, slices: Int = 4, executor: String = "1g", fileN: String = "")
+  case class Config(dir: Option[String] = None, ext: Option[String] = None,
+                    slices: Int = 4, executor: String = "1g", fileN: String = "",
+    maxc:Int= 1)
 
 
   def parseCommandLine(args: Array[String]): Option[Config] = {
@@ -14,6 +16,9 @@ object MemTimeCheck {
       opt[String]('d', "dir") action { (x, c) =>
         c.copy(dir = Some(x))
       } text ("dir is a String property")
+      opt[Int]('m', "maxc") action { (x, c) =>
+        c.copy(maxc = x)
+      } text ("max core is a Int property")
       opt[String]('e', "extension") action { (x, c) =>
         c.copy(ext = Some(x))
       } text ("ext is a String property")
@@ -38,8 +43,10 @@ object MemTimeCheck {
     val appConfig = parseCommandLine(args).getOrElse(Config())
     val exec_cores = appConfig.slices
     val exec = appConfig.executor
+    val maxc = appConfig.maxc
 
     val conf = new SparkConf().setAppName("Spark Performance-Cooley").
+      set("spark.cores.max",maxc.toString).
       set("spark.executor.memory",exec).
       set("spark.executor.cores",exec_cores.toString).
       set("","")
