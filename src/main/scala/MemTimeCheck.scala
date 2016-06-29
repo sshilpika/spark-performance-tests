@@ -6,8 +6,8 @@ import org.apache.spark.{SparkConf, SparkContext}
 object MemTimeCheck {
 
   case class Config(dir: Option[String] = None, ext: Option[String] = None,
-                    slices: Int = 4, executor: String = "1g", fileN: String = "",
-    maxc:Int= 1)
+                    slices: Int = 1, executor: String = "1g", fileN: String = "",
+    maxc:Int= 1, ecore:Int = 1)
 
 
   def parseCommandLine(args: Array[String]): Option[Config] = {
@@ -15,6 +15,9 @@ object MemTimeCheck {
       head("LineCount", "1.0")
       opt[String]('d', "dir") action { (x, c) =>
         c.copy(dir = Some(x))
+      } text ("dir is a String property")
+      opt[Int]('c', "ecore") action { (x, c) =>
+        c.copy(ecore = x)
       } text ("dir is a String property")
       opt[Int]('m', "maxc") action { (x, c) =>
         c.copy(maxc = x)
@@ -41,15 +44,16 @@ object MemTimeCheck {
   def main(args: Array[String]): Unit={
 
     val appConfig = parseCommandLine(args).getOrElse(Config())
-    val exec_cores = appConfig.slices
+    val partitions = appConfig.slices
     val exec = appConfig.executor
     val maxc = appConfig.maxc
+    val ecore = appConfig.ecore
 
     val conf = new SparkConf().setAppName("Spark-Performance-Cooley").
       set("spark.cores.max",maxc.toString).
       set("spark.executor.memory",exec).
-      set("spark.executor.cores",exec_cores.toString).
-      set("","")
+      set("spark.executor.cores",ecore.toString)//.
+      //set("","")
     val spark = new SparkContext(conf)
     val sqlContext = new org.apache.spark.sql.SQLContext(spark)
     import sqlContext.implicits._
@@ -61,7 +65,7 @@ object MemTimeCheck {
 //    val fileN = appConfig.fileN
 
     //val rdd = spark.parallelize(1 to 100000000, 3)
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",exec_cores)
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",partitions)
     //val res1 = rdd.reduce(_+_)
     val result = rdd.map(_ + 5).count()
 
