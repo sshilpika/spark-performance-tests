@@ -74,4 +74,4 @@ object MemTimeCheck {
 
 
 }
-case class Num(num: Int)
+case class Num(num: String)
