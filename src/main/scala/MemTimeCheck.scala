@@ -60,13 +60,6 @@ object MemTimeCheck {
     import sqlContext.implicits._
 
 
-    //val ds = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt").toDS()
-    //val ds = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet").as[Num]
-    //val res1 = rdd.reduce(_+_)
-    //val result = ds.map(x=> x.num+5 ).count()
-
-    println(s"The result is $result")
-
 
     val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",partitions)
     val df = rdd.toDF("num")
@@ -76,13 +69,12 @@ object MemTimeCheck {
     val rddR = rdd.map(_ + 5).count()
 
     //DF
-    val dfR = df.map(x => x("num")+5).count()
+    val dfR = df.map(x => x.getString(0)+5).count()
 
     //DS
     val dsR = ds.map(x => x+5).count()
 
-    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions.length}")
-    println(s"The debug string is ${rdd.toDebugString}")
+    println(s"The result is $rddR , $dfR , $dsR ")
   }
 
 
