@@ -41,10 +41,10 @@ object MemTimeCheck {
     parser.parse(args, Config())
   }
 
-  case class Num(num: String)
+
 
   def main(args: Array[String]): Unit={
-
+    case class Num(num: String)
     val appConfig = parseCommandLine(args).getOrElse(Config())
     val partitions = appConfig.slices
     val exec = appConfig.executor
