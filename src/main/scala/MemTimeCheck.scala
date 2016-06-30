@@ -61,14 +61,28 @@ object MemTimeCheck {
 
 
     //val ds = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt").toDS()
-    val ds = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet").as[Num]
+    //val ds = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet").as[Num]
     //val res1 = rdd.reduce(_+_)
-    val result = ds.map(x=> x.num+5 ).count()
+    //val result = ds.map(x=> x.num+5 ).count()
 
     println(s"The result is $result")
-    //println(s"The debug string is ${result}")
-    //println(s"The sum is ${res1}")
-    //spark.stop()
+
+
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",partitions)
+    val df = rdd.toDF("num")
+    val ds = rdd.toDS()
+
+    //RDD
+    val rddR = rdd.map(_ + 5).count()
+
+    //DF
+    val dfR = df.map(x => x("num")+5).count()
+
+    //DS
+    val dsR = ds.map(x => x+5).count()
+
+    println(s"The result is $result the default cores are ${spark.defaultParallelism} and partitions used  are ${rdd.partitions.length}")
+    println(s"The debug string is ${rdd.toDebugString}")
   }
 
 
