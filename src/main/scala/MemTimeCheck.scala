@@ -44,7 +44,7 @@ object MemTimeCheck {
 
 
   def main(args: Array[String]): Unit={
-    case class Num(num: Integer)
+
     val appConfig = parseCommandLine(args).getOrElse(Config())
     val partitions = appConfig.slices
     val exec = appConfig.executor
@@ -60,9 +60,10 @@ object MemTimeCheck {
     import sqlContext.implicits._
 
 
-    val ds = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt").toDS()
+    //val ds = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt").toDS()
+    val ds = sqlContext.read.parquet("/projects/ExaHDF5/sshilpika/bF").as[Num]
     //val res1 = rdd.reduce(_+_)
-    val result = ds.map(x=> x+5 ).count()
+    val result = ds.map(x=> x.num+5 ).count()
 
     println(s"The result is $result")
     //println(s"The debug string is ${result}")
@@ -73,3 +74,4 @@ object MemTimeCheck {
 
 
 }
+case class Num(num: Int)
