@@ -41,6 +41,8 @@ object MemTimeCheck {
     parser.parse(args, Config())
   }
 
+  case class Num(num: String)
+
   def main(args: Array[String]): Unit={
 
     val appConfig = parseCommandLine(args).getOrElse(Config())
@@ -58,9 +60,9 @@ object MemTimeCheck {
     import sqlContext.implicits._
 
 
-    val df = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet")
+    val ds = sqlContext.read.load("/projects/ExaHDF5/sshilpika/bf.parquet").as[Num]
     //val res1 = rdd.reduce(_+_)
-    val result = df.select(df("num")+5).count()
+    val result = ds.map(x=> x.num+5 ).count()
 
     println(s"The result is $result")
     //println(s"The debug string is ${result}")
