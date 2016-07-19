@@ -61,9 +61,9 @@ object MemTimeCheck {
 
 
 
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/BIGD1",partitions)
-    val df = sqlContext.read.text("/projects/ExaHDF5/sshilpika/BIGD")//rdd.toDF("num")
-    val ds = sqlContext.read.text("/projects/ExaHDF5/sshilpika/BIGD").as[String]
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/BIGF1",partitions)
+    val df = sqlContext.read.text("/projects/ExaHDF5/sshilpika/BIGF1")//rdd.toDF("num")
+    val ds = sqlContext.read.text("/projects/ExaHDF5/sshilpika/BIGF1").as[String]
 
     //RDD
     val rddR = rdd.map(_ + 5).count()
