@@ -1,3 +1,5 @@
+package cs.luc.edu
+import org.apache.spark.sql.DataFrame
 import org.apache.spark.{SparkConf, SparkContext}
 
 /**
@@ -61,20 +63,28 @@ object MemTimeCheck {
 
 
 
-    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/bF.txt",partitions)
+    val rdd = spark.textFile("/projects/ExaHDF5/sshilpika/BIGD",partitions)
+
+
     val df = rdd.toDF("num")
     val ds = rdd.toDS()
 
     //RDD
-    val rddR = rdd.map(_ + 5).count()
+    val rddR = performance {
+      rdd.map(_ + 5).count()
+    }
 
     //DF
-    val dfR = df.map(x => x.getString(0)+5).count()
+    val dfR = performance{
+      df.map(x => x.getString(0)+5).count()
+    }
 
     //DS
-    val dsR = ds.map(x => x+5).count()
+    val dsR = performance{
+      ds.map(x => x+5).count()
+    }
 
-    println(s"The result is $rddR , $dfR , $dsR ")
+    println(s"The result is $rddR. , $dfR , $dsR ")
   }
 
 
